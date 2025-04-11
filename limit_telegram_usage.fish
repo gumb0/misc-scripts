@@ -1,6 +1,6 @@
 #!/usr/bin/fish
 
-set TARGET_APP "Telegram"
+set TARGET_APP "telegram-desktop"
 set TIME_LIMIT_BEFORE_BLOCK_SEC 600
 set BLOCK_TIME_SEC 3600
 # set TIME_LIMIT_BEFORE_BLOCK_SEC 60
@@ -33,7 +33,7 @@ while true
     if string match -q "*$TARGET_APP*" $WINDOW_NAME
         if test $ACTIVE_TIME_SEC -ge $TIME_LIMIT_BEFORE_BLOCK_SEC
             # Telegram should be blocked, do not reset CONTINUOS_INACTIVE_TIME_SEC
-            kill (pgrep $TARGET_APP)
+            killall $TARGET_APP
             set REMAINING_BLOCK_TIME (math $BLOCK_TIME_SEC - $CONTINUOS_INACTIVE_TIME_SEC)
             set REMAINING_BLOCK_TIME_MIN (math "floor($REMAINING_BLOCK_TIME / 60)")
             zenity --info --text="Telegram is blocked. Time left until unblock: $REMAINING_BLOCK_TIME_MIN minutes" &
@@ -46,7 +46,7 @@ while true
         # echo "Active: " $ACTIVE_TIME_SEC
 
         if test $ACTIVE_TIME_SEC -ge $TIME_LIMIT_BEFORE_BLOCK_SEC
-            kill (pgrep $TARGET_APP)
+            killall $TARGET_APP
             zenity --info --text="Telegram blocked for 1 hour" &
         end
     else
